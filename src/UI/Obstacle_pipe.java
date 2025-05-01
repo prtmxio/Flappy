@@ -13,7 +13,7 @@ public class Obstacle_pipe {
     ArrayList<Pipe> pipes_top;
     ArrayList<Pipe> pipes_bottom;
     Random rand;
-    final int MOVE_DELAY_MS = 1200;
+    final int MOVE_DELAY_MS = 1400;
     long last_pipe_placed = System.currentTimeMillis();
 
     public Obstacle_pipe(){
@@ -51,19 +51,19 @@ public class Obstacle_pipe {
     }
 
     public void place_pipes(){
-        int gap = 150;
-        int topPipeHeight = rand.nextInt(200) + 100;
-
+        int gap = (Game_panel.height / 4) - 50;
         // Top pipe
         Pipe top = new Pipe(top_pipe);
+        int diff_top = (int)(Math.random()*(top.ph/2));
         top.px = Game_panel.width;
-        top.py = topPipeHeight - top.ph;
+        top.py = top.py - top.ph/4 - diff_top;
         pipes_top.add(top);
 
         // Bottom pipe
         Pipe bottom = new Pipe(bottom_pipe);
+        int diff_bottom = (int)(Math.random()*(bottom.ph/2));
         bottom.px = Game_panel.width;
-        bottom.py = topPipeHeight + gap;
+        bottom.py = top.py + bottom.ph + gap;
         pipes_bottom.add(bottom);
     }
 

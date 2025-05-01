@@ -10,8 +10,8 @@ public class Flappy_bird {
     private int[] pos = {Game_panel.width / 8, Game_panel.height / 2};
     int x = pos[0];
     int y = pos[1];
-    private int width = 34;
-    private int height = 24;
+    int width = 34;
+    int height = 24;
     BufferedImage img;
     static float Vy = 0;
     final int MOVE_DELAY_MS = 30;
@@ -43,10 +43,7 @@ public class Flappy_bird {
         y += Vy;
         if(y < 0){
             y = 0;
-        } else if (y > Game_panel.height){
-            y = Game_panel.height;
         }
-
     }
 
     public void update() {
@@ -60,5 +57,10 @@ public class Flappy_bird {
     public void render(Graphics g) {
         g.drawImage(img, (int)x, (int)y, width, height, null);
     }
+
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
+    }
+
 
 }

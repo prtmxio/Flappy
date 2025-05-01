@@ -12,6 +12,8 @@ public class Game implements Runnable{
     Flappy_bird flappy;
     Background bg;
     Obstacle_pipe obs;
+    boolean game_over = false;
+
     public Game() {
         init_classes();
         gp.requestFocusInWindow();
@@ -34,8 +36,14 @@ public class Game implements Runnable{
     }
 
     public void update() {
-        obs.update();
-        flappy.update();
+//        obs.update();
+//        flappy.update();
+        if (!game_over) {
+            obs.update();
+            flappy.update();
+            game_over();  // ✅ Check for game over condition
+        }
+
     }
 
 
@@ -43,7 +51,39 @@ public class Game implements Runnable{
         bg.render(g);
         obs.render(g);
         flappy.render(g);
+//        if (game_over) {
+//            g.setColor(Color.RED);
+//            g.setFont(new Font("Arial", Font.BOLD, 48));
+//            g.drawString("Game Over", Game_panel.width / 2 - 120, Game_panel.height / 2);
+//        }
     }
+
+    public void game_over(){
+        if (flappy.y > Game_panel.height || flappy.y + flappy.height < 0) {
+            game_over = true;
+        }
+
+        Rectangle birdBounds = flappy.getBounds();
+
+        // Collision with top pipes
+        for (Pipe top : obs.pipes_top) {
+            Rectangle topBounds = new Rectangle(top.px, top.py, top.pw, top.ph);
+            if (birdBounds.intersects(topBounds)) {
+                game_over = true;
+                return;
+            }
+        }
+
+        // Collision with bottom pipes
+        for (Pipe bottom : obs.pipes_bottom) {
+            Rectangle bottomBounds = new Rectangle(bottom.px, bottom.py, bottom.pw, bottom.ph);
+            if (birdBounds.intersects(bottomBounds)) {
+                game_over = true;
+                return;
+            }
+        }
+    }
+
 
 
     @Override
