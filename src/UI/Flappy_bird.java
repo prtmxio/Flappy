@@ -16,7 +16,7 @@ public class Flappy_bird {
     static float Vy = 0;
     final int MOVE_DELAY_MS = 30;
     long lastMoveTime = System.currentTimeMillis();
-    float gravity = 0.45f;
+    float gravity = 0.42f;
 
 
     public Flappy_bird() {

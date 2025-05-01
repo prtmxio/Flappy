@@ -9,8 +9,9 @@ public class Pipe {
     int py = pos[1];
     int pw = 64;
     int ph = 512;
+    float Vx = -2;
     boolean pipe_passed = false;
-    float Vx = -3;
+
 
     public Pipe(BufferedImage pipe){
         this.img = pipe;

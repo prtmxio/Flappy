@@ -13,6 +13,7 @@ public class Game implements Runnable{
     Background bg;
     Obstacle_pipe obs;
     boolean game_over = false;
+    double score = 0;
 
     public Game() {
         init_classes();
@@ -51,6 +52,7 @@ public class Game implements Runnable{
         bg.render(g);
         obs.render(g);
         flappy.render(g);
+        score_card(g);
 //        if (game_over) {
 //            g.setColor(Color.RED);
 //            g.setFont(new Font("Arial", Font.BOLD, 48));
@@ -59,30 +61,77 @@ public class Game implements Runnable{
     }
 
     public void game_over(){
-        if (flappy.y > Game_panel.height || flappy.y + flappy.height < 0) {
+        if (flappy.y > Game_panel.height || flappy.y + flappy.height < 0 || check_collision()) {
             game_over = true;
         }
 
-        Rectangle birdBounds = flappy.getBounds();
+    }
 
-        // Collision with top pipes
-        for (Pipe top : obs.pipes_top) {
-            Rectangle topBounds = new Rectangle(top.px, top.py, top.pw, top.ph);
-            if (birdBounds.intersects(topBounds)) {
-                game_over = true;
-                return;
-            }
-        }
-
-        // Collision with bottom pipes
-        for (Pipe bottom : obs.pipes_bottom) {
-            Rectangle bottomBounds = new Rectangle(bottom.px, bottom.py, bottom.pw, bottom.ph);
-            if (birdBounds.intersects(bottomBounds)) {
-                game_over = true;
-                return;
-            }
+    public void score_card(Graphics g){
+        g.setColor(Color.white);
+        g.setFont(new Font("Arial", Font.BOLD, 28));
+        if(game_over){
+            g.drawString("Game Over : " + String.valueOf((int)(score)), 10, 35);
+        } else {
+            g.drawString(String.valueOf((int)(score)), 10, 35);
         }
     }
+
+    public boolean check_collision() {
+        Rectangle birdBounds = flappy.getBounds();
+
+        for (int i = 0; i < obs.pipes_top.size(); i++) {
+            Pipe top = obs.pipes_top.get(i);
+            Pipe bottom = obs.pipes_bottom.get(i);
+
+            Rectangle topBounds = new Rectangle(top.px, top.py, top.pw, top.ph);
+            Rectangle bottomBounds = new Rectangle(bottom.px, bottom.py, bottom.pw, bottom.ph);
+
+            // 💥 Check collision
+            if (birdBounds.intersects(topBounds) || birdBounds.intersects(bottomBounds)) {
+                return true;
+            }
+
+            // ✅ Check if passed and update score
+            if (!top.pipe_passed && flappy.x > top.px + top.pw) {
+                score += 1;
+                top.pipe_passed = true;
+                bottom.pipe_passed = true; // mark both as passed
+            }
+        }
+
+        return false;
+    }
+
+
+//    public boolean check_collision(){
+//        Rectangle birdBounds = flappy.getBounds();
+//
+//        // Collision with top pipes
+//        for (Pipe top : obs.pipes_top) {
+//            Rectangle topBounds = new Rectangle(top.px, top.py, top.pw, top.ph);
+//            if (birdBounds.intersects(topBounds)) {
+//                game_over = true;
+//                obs.pipe_passed = false;
+//                return true;
+//            } else {
+//                score += 0.5;
+//            }
+//        }
+//
+//        // Collision with bottom pipes
+//        for (Pipe bottom : obs.pipes_bottom) {
+//            Rectangle bottomBounds = new Rectangle(bottom.px, bottom.py, bottom.pw, bottom.ph);
+//            if (birdBounds.intersects(bottomBounds)) {
+//                game_over = true;
+//                obs.pipe_passed = false;
+//                return true;
+//            } else {
+//                score += 0.5;
+//            }
+//        }
+//        return false;
+//    }
 
 
 
