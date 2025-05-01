@@ -28,12 +28,13 @@ public class Game implements Runnable{
     }
 
     private void init_classes() {
-        gp = new Game_panel(this);
-        gf = new Game_frame(gp);
-        gp.addKeyListener(new KeyHandler());
         bg = new Background();
         obs = new Obstacle_pipe();
         flappy = new Flappy_bird();
+        gp = new Game_panel(this);
+        gf = new Game_frame(gp);
+        keyH = new KeyHandler();
+        gp.addKeyListener(keyH);
     }
 
     public void update() {
@@ -43,6 +44,10 @@ public class Game implements Runnable{
             obs.update();
             flappy.update();
             game_over();  // ✅ Check for game over condition
+        } else {
+            if(keyH.restart){
+                restart_game();
+            }
         }
 
     }
@@ -65,6 +70,12 @@ public class Game implements Runnable{
             game_over = true;
         }
 
+    }
+
+    public void restart_game(){
+        init_classes();
+        score = 0;
+        game_over = false;
     }
 
     public void score_card(Graphics g){

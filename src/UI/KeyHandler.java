@@ -5,6 +5,8 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
+    public boolean restart = false;
+
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -14,6 +16,10 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
             Flappy_bird.Vy = -9;
+        }
+
+        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+            restart = true;
         }
     }
 
